@@ -1,0 +1,14 @@
+package com.bhawna.Week2.SpringBootWeb.SpringBootWeb;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class SpringBootWebTutorialApplication {
+
+	public static void main(String[] args) {
+
+		SpringApplication.run(SpringBootWebTutorialApplication.class, args);
+	}
+
+}
