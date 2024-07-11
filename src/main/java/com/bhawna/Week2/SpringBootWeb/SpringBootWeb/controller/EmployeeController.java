@@ -2,10 +2,9 @@ package com.bhawna.Week2.SpringBootWeb.SpringBootWeb.controller;
 
 import com.bhawna.Week2.SpringBootWeb.SpringBootWeb.dto.EmployeeDTO;
 import com.bhawna.Week2.SpringBootWeb.SpringBootWeb.entities.EmployeeEntity;
-import com.bhawna.Week2.SpringBootWeb.SpringBootWeb.repositories.EmployeeRepository;
+import com.bhawna.Week2.SpringBootWeb.SpringBootWeb.service.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -16,26 +15,27 @@ public class EmployeeController{
 //        return "Secret message: Learning Spring Boot";
 //    }
 
-  private final EmployeeRepository employeeRepository;
+  private final EmployeeService employeeService;
 
-    public EmployeeController(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
 
+
     @GetMapping(path="/{employeeId}")
-      public EmployeeEntity getEmployeeId(@PathVariable(name = "employeeId") Long id){
-      return employeeRepository.findById(id).orElse(null);
+      public EmployeeDTO getEmployeeId(@PathVariable(name = "employeeId") Long id){
+      return employeeService.getEmployeeById(id);
   }
 
   @GetMapping
-    public List<EmployeeEntity> getAllEmployees(@RequestParam Integer age,
-                                                @RequestParam String sortBy){
-      return employeeRepository.findAll();
+    public List<EmployeeDTO> getAllEmployees(@RequestParam(required = false) Integer age,
+                                             @RequestParam(required = false) String sortBy){
+      return employeeService.getAllEmployees();
   }
 
   @PostMapping
-    public EmployeeEntity createNewEmployee(@RequestBody EmployeeEntity inputEmployee){
-      return employeeRepository.save(inputEmployee);
+    public EmployeeDTO createNewEmployee(@RequestBody EmployeeDTO inputEmployee){
+      return employeeService.createNewEmployee(inputEmployee);
   }
 
   @PutMapping String updateEmployeeId(){
