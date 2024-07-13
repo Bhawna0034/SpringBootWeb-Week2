@@ -15,7 +15,7 @@ public @interface  EmployeeRoleValidation {
 
     String message() default  "Role of Employee can either be USER or ADMIN";
 
-    Class <?>[] group() default {};
+    Class <?>[] groups() default {};
 
     Class <? extends Payload>[] payload() default {};
 }

@@ -2,6 +2,7 @@ package com.bhawna.Week2.SpringBootWeb.SpringBootWeb.service;
 
 import com.bhawna.Week2.SpringBootWeb.SpringBootWeb.dto.EmployeeDTO;
 import com.bhawna.Week2.SpringBootWeb.SpringBootWeb.entities.EmployeeEntity;
+import com.bhawna.Week2.SpringBootWeb.SpringBootWeb.exceptions.ResourceNotFoundException;
 import com.bhawna.Week2.SpringBootWeb.SpringBootWeb.repositories.EmployeeRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.util.ReflectionUtils;
@@ -46,27 +47,26 @@ public class EmployeeService {
     }
 
     public EmployeeDTO updateEmployeeId(Long employeeId, EmployeeDTO employeeDTO) {
+        isPresentByEmployeeId(employeeId);
         EmployeeEntity employeeEntity = modelMapper.map(employeeDTO, EmployeeEntity.class);
         EmployeeEntity savedEmployeeEntity = employeeRepository.save(employeeEntity);
         return modelMapper.map(savedEmployeeEntity, EmployeeDTO.class);
     }
 
-    public boolean isPresentByEmployeeId(Long employeeId){
-        return employeeRepository.existsById(employeeId);
+    public void isPresentByEmployeeId(Long employeeId){
+        boolean isPresent = employeeRepository.existsById(employeeId);
+        if(!isPresent)
+            throw new ResourceNotFoundException("Element Not Found with id: " + employeeId);
     }
 
     public boolean deleteEmployeeById(Long employeeId) {
-        boolean isPresent = isPresentByEmployeeId(employeeId);
-        if(!isPresent)
-            return false;
+        isPresentByEmployeeId(employeeId);
         employeeRepository.deleteById(employeeId);
         return true;
     }
 
     public EmployeeDTO updatePartiallyEmployeeId(Long employeeId, Map<String, Object> updates) {
-        boolean isPresent = isPresentByEmployeeId(employeeId);
-        if(!isPresent)
-          return null;
+        isPresentByEmployeeId(employeeId);
         EmployeeEntity employeeEntity = employeeRepository.findById(employeeId).get();
         updates.forEach((field,value) -> {
            Field fieldToBeUpdated =  ReflectionUtils.findRequiredField(EmployeeEntity.class, field);

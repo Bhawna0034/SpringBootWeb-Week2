@@ -35,7 +35,6 @@ public class EmployeeDTO {
     private String role;
 
     @NotNull
-
     @PastOrPresent
     private LocalDate dateOfJoining;
     @JsonProperty("isActive")
